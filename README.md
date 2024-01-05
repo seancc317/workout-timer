@@ -33,7 +33,7 @@ Contributions to the project are welcome. Please feel free to fork the repositor
 [MIT License](LICENSE.md)
 
 ## Author
-[Your Name]
+seancc317
 
 ## Acknowledgments
 - Thanks to everyone who has contributed to the development of this project.
