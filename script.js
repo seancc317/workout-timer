@@ -8,23 +8,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
         beep.play().then(() => {
             soundEnabled = true;
             enableSoundButton.textContent = 'Sound Enabled';
-            showTestSoundButton();
         }).catch(e => {
             console.error("Audio enable failed: ", e.message);
             enableSoundButton.textContent = 'Enable Sound (Click Again if Needed)';
+            // Reset button text after a delay
+            setTimeout(() => {
+                enableSoundButton.textContent = 'Enable Sound';
+            }, 3000);
         });
     });
-
-    function showTestSoundButton() {
-        const testSoundButton = document.createElement('button');
-        testSoundButton.textContent = 'Test Sound';
-        testSoundButton.addEventListener('click', () => {
-            if (soundEnabled) {
-                beep.play();
-            }
-        });
-        document.body.appendChild(testSoundButton);
-    }
 
     document.getElementById('start-button').addEventListener('click', function() {
         if (!validateInputs()) {
@@ -40,7 +32,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
     function validateInputs() {
-        // Ensure all elements exist before attempting to read their values
         if (!document.getElementById('total-minutes') || !document.getElementById('total-seconds') ||
             !document.getElementById('exercise-minutes') || !document.getElementById('exercise-seconds') ||
             !document.getElementById('rest-minutes') || !document.getElementById('rest-seconds')) {
