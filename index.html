@@ -6,7 +6,6 @@
 </head>
 <body>
     <div class="container active">
-        <!-- Input Form for Workout Duration, Exercise Interval, Rest Interval -->
         <div>
             <h2>Total Workout Duration</h2>
             <input type="number" id="total-minutes" placeholder="Minutes" min="0">
@@ -26,6 +25,7 @@
     </div>
 
     <div class="timer-screen">
+        <div id="countdown-display" class="message">Get Ready...</div> <!-- Countdown display -->
         <div class="message" id="timer-message">Ready</div>
         <div class="timer" id="timer-display">00:00</div>
     </div>
