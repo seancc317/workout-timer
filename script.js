@@ -7,8 +7,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
             return;
         }
 
-        // Load the beep sound in advance to circumvent browser restrictions
+        // Load and play beep sound to ensure it's allowed by the browser
         beep.load();
+        beep.play();
 
         const totalDuration = getSeconds('total-minutes', 'total-seconds');
         const exerciseInterval = getSeconds('exercise-minutes', 'exercise-seconds');
@@ -54,13 +55,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function preWorkoutCountdown(countdownSeconds, totalDuration, exerciseInterval, restInterval, beep) {
         let countdown = countdownSeconds;
-        updateMessage(`Starting in ${countdown}...`);
+        document.getElementById('countdown-display').textContent = `Starting in ${countdown}...`;
         const countdownInterval = setInterval(() => {
             countdown--;
             if (countdown > 0) {
-                updateMessage(`Starting in ${countdown}...`);
+                document.getElementById('countdown-display').textContent = `Starting in ${countdown}...`;
             } else {
                 clearInterval(countdownInterval);
+                document.getElementById('countdown-display').textContent = ''; // Clear countdown display
                 updateMessage('GO!');
                 startWorkout(totalDuration, exerciseInterval, restInterval, beep);
             }
