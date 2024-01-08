@@ -13,6 +13,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
     function validateInputs() {
+        // Ensure all elements exist before attempting to read their values
+        if (!document.getElementById('total-minutes') || !document.getElementById('total-seconds') ||
+            !document.getElementById('exercise-minutes') || !document.getElementById('exercise-seconds') ||
+            !document.getElementById('rest-minutes') || !document.getElementById('rest-seconds')) {
+            console.error('One or more input elements cannot be found.');
+            return false;
+        }
+
         const totalMinutes = parseInt(document.getElementById('total-minutes').value) || 0;
         const totalSeconds = parseInt(document.getElementById('total-seconds').value) || 0;
         const exerciseMinutes = parseInt(document.getElementById('exercise-minutes').value) || 0;
