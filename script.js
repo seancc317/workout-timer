@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
             return;
         }
 
-        // Load and play beep sound to ensure it's allowed by the browser
+        // Load and attempt to play beep sound to comply with browser policies
         beep.load();
-        beep.play();
+        beep.play().catch(e => console.log("Audio play failed: ", e.message));
 
         const totalDuration = getSeconds('total-minutes', 'total-seconds');
         const exerciseInterval = getSeconds('exercise-minutes', 'exercise-seconds');
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 document.getElementById('countdown-display').textContent = `Starting in ${countdown}...`;
             } else {
                 clearInterval(countdownInterval);
-                document.getElementById('countdown-display').textContent = ''; // Clear countdown display
+                document.getElementById('countdown-display').textContent = '';
                 updateMessage('GO!');
                 startWorkout(totalDuration, exerciseInterval, restInterval, beep);
             }
