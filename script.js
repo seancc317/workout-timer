@@ -1,8 +1,10 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-    let beep = new Audio('https://www.soundjay.com/button/beep-07.wav');
+    let beep = new Audio('https://freesound.org/data/previews/250/250629_4486188-lq.mp3'); // Different sound file
     let soundEnabled = false;
 
     const enableSoundButton = document.getElementById('enable-sound-button');
+    enableSoundButton.textContent = 'Enable Sound'; // Reset button text on page load
+
     enableSoundButton.addEventListener('click', function() {
         beep.load();
         beep.play().then(() => {
@@ -11,9 +13,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }).catch(e => {
             console.error("Audio enable failed: ", e.message);
             enableSoundButton.textContent = 'Enable Sound (Click Again if Needed)';
-            // Reset button text after a delay
             setTimeout(() => {
-                enableSoundButton.textContent = 'Enable Sound';
+                enableSoundButton.textContent = 'Enable Sound'; // Reset button text after a delay
             }, 3000);
         });
     });
