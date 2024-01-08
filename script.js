@@ -1,5 +1,15 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     let beep = new Audio('https://www.soundjay.com/button/beep-07.wav');
+    let soundEnabled = false;
+
+    document.getElementById('enable-sound-button').addEventListener('click', function() {
+        // Attempt to play and then pause the beep sound
+        beep.play().then(() => {
+            beep.pause();
+            soundEnabled = true;
+            this.textContent = 'Sound Enabled';
+        }).catch(e => console.log("Audio enable failed: ", e.message));
+    });
 
     document.getElementById('start-button').addEventListener('click', function() {
         if (!validateInputs()) {
@@ -7,16 +17,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
             return;
         }
 
-        // Load and attempt to play beep sound to comply with browser policies
-        beep.load();
-        beep.play().catch(e => console.log("Audio play failed: ", e.message));
-
         const totalDuration = getSeconds('total-minutes', 'total-seconds');
         const exerciseInterval = getSeconds('exercise-minutes', 'exercise-seconds');
         const restInterval = getSeconds('rest-minutes', 'rest-seconds');
 
         // Start the pre-workout countdown
-        preWorkoutCountdown(3, totalDuration, exerciseInterval, restInterval, beep);
+        preWorkoutCountdown(3, totalDuration, exerciseInterval, restInterval, beep, soundEnabled);
     });
 
     function validateInputs() {
@@ -53,7 +59,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return minutes * 60 + seconds;
     }
 
-    function preWorkoutCountdown(countdownSeconds, totalDuration, exerciseInterval, restInterval, beep) {
+    function preWorkoutCountdown(countdownSeconds, totalDuration, exerciseInterval, restInterval, beep, soundEnabled) {
         let countdown = countdownSeconds;
         document.getElementById('countdown-display').textContent = `Starting in ${countdown}...`;
         const countdownInterval = setInterval(() => {
@@ -64,12 +70,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 clearInterval(countdownInterval);
                 document.getElementById('countdown-display').textContent = '';
                 updateMessage('GO!');
-                startWorkout(totalDuration, exerciseInterval, restInterval, beep);
+                startWorkout(totalDuration, exerciseInterval, restInterval, beep, soundEnabled);
             }
         }, 1000);
     }
 
-    function startWorkout(totalDuration, exerciseInterval, restInterval, beep) {
+    function startWorkout(totalDuration, exerciseInterval, restInterval, beep, soundEnabled) {
         let remainingTime = totalDuration;
         let intervalTime = exerciseInterval;
         let isExercise = true;
@@ -77,7 +83,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.querySelector('.container').classList.remove('active');
         document.querySelector('.timer-screen').classList.add('active');
         
-        beep.play(); // Play beep sound at the start
+        if (soundEnabled) {
+            beep.play(); // Play beep sound at the start
+        }
 
         const interval = setInterval(() => {
             if (remainingTime <= 0) {
@@ -92,7 +100,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 isExercise = !isExercise;
                 intervalTime = isExercise ? exerciseInterval : restInterval;
                 updateMessage(isExercise ? 'GO!' : 'Rest!');
-                beep.play(); // Play beep sound at each transition
+                if (soundEnabled) {
+                    beep.play(); // Play beep sound at each transition
+                }
             }
 
             updateTimerDisplay(remainingTime);
