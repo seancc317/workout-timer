@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const exerciseInterval = getSeconds('exercise-minutes', 'exercise-seconds');
         const restInterval = getSeconds('rest-minutes', 'rest-seconds');
 
-        startWorkout(totalDuration, exerciseInterval, restInterval);
+        // Start the pre-workout countdown
+        preWorkoutCountdown(3, totalDuration, exerciseInterval, restInterval);
     });
 
     function validateInputs() {
@@ -46,14 +47,29 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return minutes * 60 + seconds;
     }
 
+    function preWorkoutCountdown(countdownSeconds, totalDuration, exerciseInterval, restInterval) {
+        let countdown = countdownSeconds;
+        updateMessage(`Starting in ${countdown}...`);
+        const countdownInterval = setInterval(() => {
+            countdown--;
+            updateMessage(`Starting in ${countdown}...`);
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                startWorkout(totalDuration, exerciseInterval, restInterval);
+            }
+        }, 1000);
+    }
+
     function startWorkout(totalDuration, exerciseInterval, restInterval) {
         let remainingTime = totalDuration;
         let intervalTime = exerciseInterval;
         let isExercise = true;
+        let beep = new Audio('https://www.soundjay.com/button/beep-07.wav');
 
         document.querySelector('.container').classList.remove('active');
         document.querySelector('.timer-screen').classList.add('active');
         updateMessage('GO!');
+        beep.play();
 
         const interval = setInterval(() => {
             if (remainingTime <= 0) {
@@ -68,6 +84,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 isExercise = !isExercise;
                 intervalTime = isExercise ? exerciseInterval : restInterval;
                 updateMessage(isExercise ? 'GO!' : 'Rest!');
+                beep.play();
             }
 
             updateTimerDisplay(remainingTime);
