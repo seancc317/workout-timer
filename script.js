@@ -49,10 +49,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
                isNumberInRange(restSeconds, 0, 59);
     }
 
-    function isNumberInRange(value, min, max) {
-        const num = parseInt(value);
-        return !isNaN(num) && num >= min && num <= max;
-    }
+   function isNumberInRange(value, min, max) {
+    const num = parseInt(value, 10);
+    return !isNaN(num) && num >= min && num <= max;
+}
 
     function getSeconds(minutesId, secondsId) {
         const minutes = parseInt(document.getElementById(minutesId).value) || 0;
