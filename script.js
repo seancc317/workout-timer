@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     let beep = new Audio('https://raw.githubusercontent.com/seancc317/workout-timer/main/699701__magnuswaker__elevator-beep.wav');
+    let applause = new Audio('https://raw.githubusercontent.com/seancc317/workout-timer/main/181934__landub__applause2.wav'); // Replace with your applause sound URL
     let soundEnabled = false;
 
     const enableSoundButton = document.getElementById('enable-sound-button');
@@ -125,16 +126,29 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function updateMessage(message) {
         document.getElementById('timer-message').textContent = message;
+        if (message === 'Workout COMPLETE!' && soundEnabled) {
+            applause.play();
+        }
     }
 
     function showResetButton() {
         const resetButton = document.createElement('button');
         resetButton.textContent = 'Reset Workout';
-        resetButton.onclick = function() {
-            document.querySelector('.timer-screen').classList.remove('active');
-            document.querySelector('.container').classList.add('active');
-            this.remove(); // Remove the reset button after use
-        };
+        resetButton.onclick = resetWorkout;
         document.querySelector('.timer-screen').appendChild(resetButton);
+    }
+
+    function resetWorkout() {
+        document.querySelector('.timer-screen').classList.remove('active');
+        document.querySelector('.container').classList.add('active');
+        document.getElementById('total-minutes').value = '';
+        document.getElementById('total-seconds').value = '';
+        document.getElementById('exercise-minutes').value = '';
+        document.getElementById('exercise-seconds').value = '';
+        document.getElementById('rest-minutes').value = '';
+        document.getElementById('rest-seconds').value = '';
+        enableSoundButton.textContent = 'Enable Sound';
+        soundEnabled = false;
+        this.remove(); // Remove the reset button
     }
 });
