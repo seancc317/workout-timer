@@ -49,10 +49,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
                isNumberInRange(restSeconds, 0, 59);
     }
 
-   function isNumberInRange(value, min, max) {
-    const num = parseInt(value, 10);
-    return !isNaN(num) && num >= min && num <= max;
-}
+    function isNumberInRange(value, min, max) {
+        const num = parseInt(value, 10);
+        return !isNaN(num) && num >= min && num <= max;
+    }
 
     function getSeconds(minutesId, secondsId) {
         const minutes = parseInt(document.getElementById(minutesId).value) || 0;
@@ -60,29 +60,25 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return minutes * 60 + seconds;
     }
 
-   function preWorkoutCountdown(countdownSeconds, totalDuration, exerciseInterval, restInterval, beep, soundEnabled) {
-    console.log("preWorkoutCountdown called"); // Debugging line
-    let countdown = countdownSeconds;
-    document.getElementById('countdown-display').textContent = `Starting in ${countdown}...`;
-    const countdownInterval = setInterval(() => {
-        countdown--;
-        console.log("Countdown: ", countdown); // Debugging line
-        if (countdown > 0) {
-            document.getElementById('countdown-display').textContent = `Starting in ${countdown}...`;
-        } else {
-            clearInterval(countdownInterval);
-            document.getElementById('countdown-display').textContent = '';
-            startWorkout(totalDuration, exerciseInterval, restInterval, beep, soundEnabled);
-        }
-    }, 1000);
-}
+    function preWorkoutCountdown(countdownSeconds, totalDuration, exerciseInterval, restInterval, beep, soundEnabled) {
+        let countdown = countdownSeconds;
+        document.getElementById('countdown-display').textContent = `Starting in ${countdown}...`;
+        const countdownInterval = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+                document.getElementById('countdown-display').textContent = `Starting in ${countdown}...`;
+            } else {
+                clearInterval(countdownInterval);
+                document.getElementById('countdown-display').textContent = '';
+                startWorkout(totalDuration, exerciseInterval, restInterval, beep, soundEnabled);
+            }
+        }, 1000);
+    }
 
-function startWorkout(totalDuration, exerciseInterval, restInterval, beep, soundEnabled) {
-    // Separate the phase timer initialization from the countdown
-    let remainingTime = totalDuration;
-    let intervalTime = exerciseInterval;
-    let isExercise = true;
-    updatePhaseTimer(intervalTime); // Initialize phase timer
+    function startWorkout(totalDuration, exerciseInterval, restInterval, beep, soundEnabled) {
+        let remainingTime = totalDuration;
+        let intervalTime = exerciseInterval;
+        let isExercise = true;
 
         document.querySelector('.container').classList.remove('active');
         document.querySelector('.timer-screen').classList.add('active');
@@ -107,10 +103,6 @@ function startWorkout(totalDuration, exerciseInterval, restInterval, beep, sound
                 isExercise = !isExercise;
                 intervalTime = isExercise ? exerciseInterval : restInterval;
                 updateMessage(isExercise ? 'GO!' : 'Rest!');
-                updatePhaseTimer(intervalTime);
-                if (soundEnabled) {
-                    beep.play();
-                }
             }
 
             updateTimerDisplay(remainingTime);
@@ -127,10 +119,6 @@ function startWorkout(totalDuration, exerciseInterval, restInterval, beep, sound
 
     function updateMessage(message) {
         document.getElementById('timer-message').textContent = message;
-    }
-
-    function updatePhaseTimer(seconds) {
-        document.getElementById('phase-timer').textContent = `Next: ${seconds} sec`;
     }
 
     function showResetButton() {
