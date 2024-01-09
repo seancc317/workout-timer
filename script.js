@@ -60,20 +60,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return minutes * 60 + seconds;
     }
 
-    function preWorkoutCountdown(countdownSeconds, totalDuration, exerciseInterval, restInterval, beep, soundEnabled) {
-        let countdown = countdownSeconds;
-        document.getElementById('countdown-display').textContent = `Starting in ${countdown}...`;
-        const countdownInterval = setInterval(() => {
-            countdown--;
-            if (countdown > 0) {
-                document.getElementById('countdown-display').textContent = `Starting in ${countdown}...`;
-            } else {
-                clearInterval(countdownInterval);
-                document.getElementById('countdown-display').textContent = '';
-                startWorkout(totalDuration, exerciseInterval, restInterval, beep, soundEnabled);
-            }
-        }, 1000);
-    }
+   function preWorkoutCountdown(countdownSeconds, totalDuration, exerciseInterval, restInterval, beep, soundEnabled) {
+    let countdown = countdownSeconds;
+    document.getElementById('countdown-display').textContent = `Starting in ${countdown}...`;
+    const countdownInterval = setInterval(() => {
+        countdown--;
+        if (countdown > 0) {
+            document.getElementById('countdown-display').textContent = `Starting in ${countdown}...`;
+        } else {
+            clearInterval(countdownInterval);
+            document.getElementById('countdown-display').textContent = ''; // Clear countdown text
+            startWorkout(totalDuration, exerciseInterval, restInterval, beep, soundEnabled);
+        }
+    }, 1000);
+}
 
     function startWorkout(totalDuration, exerciseInterval, restInterval, beep, soundEnabled) {
         let remainingTime = totalDuration;
