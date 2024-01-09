@@ -34,22 +34,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
     function validateInputs() {
-        const totalMinutesInput = document.getElementById('total-minutes');
-        const totalSecondsInput = document.getElementById('total-seconds');
-        const exerciseMinutesInput = document.getElementById('exercise-minutes');
-        const exerciseSecondsInput = document.getElementById('exercise-seconds');
-        const restMinutesInput = document.getElementById('rest-minutes');
-        const restSecondsInput = document.getElementById('rest-seconds');
+        const totalMinutes = document.getElementById('total-minutes').value || '0';
+        const totalSeconds = document.getElementById('total-seconds').value || '0';
+        const exerciseMinutes = document.getElementById('exercise-minutes').value || '0';
+        const exerciseSeconds = document.getElementById('exercise-seconds').value || '0';
+        const restMinutes = document.getElementById('rest-minutes').value || '0';
+        const restSeconds = document.getElementById('rest-seconds').value || '0';
 
-        return totalMinutesInput && totalSecondsInput &&
-               exerciseMinutesInput && exerciseSecondsInput &&
-               restMinutesInput && restSecondsInput &&
-               isNumberInRange(totalMinutesInput.value, 0, 180) &&
-               isNumberInRange(totalSecondsInput.value, 0, 59) &&
-               isNumberInRange(exerciseMinutesInput.value, 0, 180) &&
-               isNumberInRange(exerciseSecondsInput.value, 0, 59) &&
-               isNumberInRange(restMinutesInput.value, 0, 180) &&
-               isNumberInRange(restSecondsInput.value, 0, 59);
+        return isNumberInRange(totalMinutes, 0, 180) &&
+               isNumberInRange(totalSeconds, 0, 59) &&
+               isNumberInRange(exerciseMinutes, 0, 180) &&
+               isNumberInRange(exerciseSeconds, 0, 59) &&
+               isNumberInRange(restMinutes, 0, 180) &&
+               isNumberInRange(restSeconds, 0, 59);
     }
 
     function isNumberInRange(value, min, max) {
