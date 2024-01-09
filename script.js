@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-    let beep = new Audio('https://freesound.org/data/previews/250/250629_4486188-lq.mp3'); // Different sound file
+    let beep = new Audio('https://raw.githubusercontent.com/seancc317/workout-timer/main/699701__magnuswaker__elevator-beep.wav');
     let soundEnabled = false;
 
     const enableSoundButton = document.getElementById('enable-sound-button');
-    enableSoundButton.textContent = 'Enable Sound'; // Reset button text on page load
+    enableSoundButton.textContent = 'Enable Sound';
 
     enableSoundButton.addEventListener('click', function() {
         beep.load();
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             console.error("Audio enable failed: ", e.message);
             enableSoundButton.textContent = 'Enable Sound (Click Again if Needed)';
             setTimeout(() => {
-                enableSoundButton.textContent = 'Enable Sound'; // Reset button text after a delay
+                enableSoundButton.textContent = 'Enable Sound';
             }, 3000);
         });
     });
