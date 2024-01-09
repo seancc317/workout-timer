@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     let beep = new Audio('https://raw.githubusercontent.com/seancc317/workout-timer/main/699701__magnuswaker__elevator-beep.wav');
-    let applause = new Audio('https://raw.githubusercontent.com/seancc317/workout-timer/main/181934__landub__applause2.wav'); // Replace with your applause sound URL
+    let applause = new Audio('https://raw.githubusercontent.com/seancc317/workout-timer/main/181934__landub__applause2.wav');
     let soundEnabled = false;
 
     const enableSoundButton = document.getElementById('enable-sound-button');
@@ -34,30 +34,27 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
     function validateInputs() {
-        if (!document.getElementById('total-minutes') || !document.getElementById('total-seconds') ||
-            !document.getElementById('exercise-minutes') || !document.getElementById('exercise-seconds') ||
-            !document.getElementById('rest-minutes') || !document.getElementById('rest-seconds')) {
-            console.error('One or more input elements cannot be found.');
-            return false;
-        }
+        const totalMinutesInput = document.getElementById('total-minutes');
+        const totalSecondsInput = document.getElementById('total-seconds');
+        const exerciseMinutesInput = document.getElementById('exercise-minutes');
+        const exerciseSecondsInput = document.getElementById('exercise-seconds');
+        const restMinutesInput = document.getElementById('rest-minutes');
+        const restSecondsInput = document.getElementById('rest-seconds');
 
-        const totalMinutes = parseInt(document.getElementById('total-minutes').value) || 0;
-        const totalSeconds = parseInt(document.getElementById('total-seconds').value) || 0;
-        const exerciseMinutes = parseInt(document.getElementById('exercise-minutes').value) || 0;
-        const exerciseSeconds = parseInt(document.getElementById('exercise-seconds').value) || 0;
-        const restMinutes = parseInt(document.getElementById('rest-minutes').value) || 0;
-        const restSeconds = parseInt(document.getElementById('rest-seconds').value) || 0;
-
-        return isNumberInRange(totalMinutes, 0, 180) &&
-               isNumberInRange(totalSeconds, 0, 59) &&
-               isNumberInRange(exerciseMinutes, 0, 180) &&
-               isNumberInRange(exerciseSeconds, 0, 59) &&
-               isNumberInRange(restMinutes, 0, 180) &&
-               isNumberInRange(restSeconds, 0, 59);
+        return totalMinutesInput && totalSecondsInput &&
+               exerciseMinutesInput && exerciseSecondsInput &&
+               restMinutesInput && restSecondsInput &&
+               isNumberInRange(totalMinutesInput.value, 0, 180) &&
+               isNumberInRange(totalSecondsInput.value, 0, 59) &&
+               isNumberInRange(exerciseMinutesInput.value, 0, 180) &&
+               isNumberInRange(exerciseSecondsInput.value, 0, 59) &&
+               isNumberInRange(restMinutesInput.value, 0, 180) &&
+               isNumberInRange(restSecondsInput.value, 0, 59);
     }
 
     function isNumberInRange(value, min, max) {
-        return typeof value === 'number' && value >= min && value <= max;
+        const num = parseInt(value);
+        return !isNaN(num) && num >= min && num <= max;
     }
 
     function getSeconds(minutesId, secondsId) {
@@ -76,7 +73,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             } else {
                 clearInterval(countdownInterval);
                 document.getElementById('countdown-display').textContent = '';
-                updateMessage('GO!');
                 startWorkout(totalDuration, exerciseInterval, restInterval, beep, soundEnabled);
             }
         }, 1000);
@@ -86,12 +82,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
         let remainingTime = totalDuration;
         let intervalTime = exerciseInterval;
         let isExercise = true;
+        updatePhaseTimer(intervalTime);
 
         document.querySelector('.container').classList.remove('active');
         document.querySelector('.timer-screen').classList.add('active');
         
         if (soundEnabled) {
-            beep.play(); // Play beep sound at the start
+            beep.play();
         }
 
         const interval = setInterval(() => {
@@ -99,6 +96,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 clearInterval(interval);
                 updateTimerDisplay(0);
                 updateMessage('Workout COMPLETE!');
+                if (soundEnabled) {
+                    applause.play();
+                }
                 showResetButton();
                 return;
             }
@@ -107,8 +107,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 isExercise = !isExercise;
                 intervalTime = isExercise ? exerciseInterval : restInterval;
                 updateMessage(isExercise ? 'GO!' : 'Rest!');
+                updatePhaseTimer(intervalTime);
                 if (soundEnabled) {
-                    beep.play(); // Play beep sound at each transition
+                    beep.play();
                 }
             }
 
@@ -126,9 +127,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function updateMessage(message) {
         document.getElementById('timer-message').textContent = message;
-        if (message === 'Workout COMPLETE!' && soundEnabled) {
-            applause.play();
-        }
+    }
+
+    function updatePhaseTimer(seconds) {
+        document.getElementById('phase-timer').textContent = `Next: ${seconds} sec`;
     }
 
     function showResetButton() {
