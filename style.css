@@ -7,6 +7,7 @@ body {
     height: 100vh;
     background-color: #f4f4f4;
 }
+
 .container, .timer-screen {
     text-align: center;
     background: #fff;
@@ -16,14 +17,17 @@ body {
     margin-bottom: 20px;
     display: none;
 }
+
 .timer-screen.active, .container.active {
     display: block;
 }
+
 input {
     margin: 10px;
     padding: 10px;
     width: 50px;
 }
+
 button {
     padding: 10px 20px;
     background-color: #007bff;
@@ -33,13 +37,16 @@ button {
     cursor: pointer;
     font-size: 16px;
 }
+
 button:hover {
     background-color: #0056b3;
 }
+
 .message {
     font-size: 24px;
     margin: 20px;
 }
+
 .timer {
     font-size: 36px;
     margin: 10px;
