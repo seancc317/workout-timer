@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     let beep = new Audio('https://raw.githubusercontent.com/seancc317/workout-timer/main/699701__magnuswaker__elevator-beep.wav');
-    let applause = new Audio('https://raw.githubusercontent.com/seancc317/workout-timer/main/181934__landub__applause2.wav');
+    let applause = new Audio('URL_OF_YOUR_APPLAUSE_SOUND_FILE'); // Replace with your applause sound URL
     let soundEnabled = false;
 
     const enableSoundButton = document.getElementById('enable-sound-button');
@@ -30,16 +30,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const exerciseInterval = getSeconds('exercise-minutes', 'exercise-seconds');
         const restInterval = getSeconds('rest-minutes', 'rest-seconds');
 
-        preWorkoutCountdown(3, totalDuration, exerciseInterval, restInterval);
+        preWorkoutCountdown(3, totalDuration, exerciseInterval, restInterval, beep, soundEnabled);
     });
 
     function validateInputs() {
-        const totalMinutes = document.getElementById('total-minutes').value || '0';
-        const totalSeconds = document.getElementById('total-seconds').value || '0';
-        const exerciseMinutes = document.getElementById('exercise-minutes').value || '0';
-        const exerciseSeconds = document.getElementById('exercise-seconds').value || '0';
-        const restMinutes = document.getElementById('rest-minutes').value || '0';
-        const restSeconds = document.getElementById('rest-seconds').value || '0';
+        if (!document.getElementById('total-minutes') || !document.getElementById('total-seconds') ||
+            !document.getElementById('exercise-minutes') || !document.getElementById('exercise-seconds') ||
+            !document.getElementById('rest-minutes') || !document.getElementById('rest-seconds')) {
+            console.error('One or more input elements cannot be found.');
+            return false;
+        }
+
+        const totalMinutes = parseInt(document.getElementById('total-minutes').value) || 0;
+        const totalSeconds = parseInt(document.getElementById('total-seconds').value) || 0;
+        const exerciseMinutes = parseInt(document.getElementById('exercise-minutes').value) || 0;
+        const exerciseSeconds = parseInt(document.getElementById('exercise-seconds').value) || 0;
+        const restMinutes = parseInt(document.getElementById('rest-minutes').value) || 0;
+        const restSeconds = parseInt(document.getElementById('rest-seconds').value) || 0;
 
         return isNumberInRange(totalMinutes, 0, 180) &&
                isNumberInRange(totalSeconds, 0, 59) &&
@@ -50,8 +57,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function isNumberInRange(value, min, max) {
-        const num = parseInt(value, 10);
-        return !isNaN(num) && num >= min && num <= max;
+        return typeof value === 'number' && value >= min && value <= max;
     }
 
     function getSeconds(minutesId, secondsId) {
@@ -60,85 +66,89 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return minutes * 60 + seconds;
     }
 
-    function preWorkoutCountdown(countdownSeconds, totalDuration, exerciseInterval, restInterval) {
+    function preWorkoutCountdown(countdownSeconds, totalDuration, exerciseInterval, restInterval, beep, soundEnabled) {
         let countdown = countdownSeconds;
-        const countdownDisplay = document.getElementById('countdown-display');
-        countdownDisplay.textContent = `Starting in ${countdown}...`;
+        document.getElementById('countdown-display').textContent = `Starting in ${countdown}...`;
         const countdownInterval = setInterval(() => {
             countdown--;
             if (countdown > 0) {
-                countdownDisplay.textContent = `Starting in ${countdown}...`;
+                document.getElementById('countdown-display').textContent = `Starting in ${countdown}...`;
             } else {
                 clearInterval(countdownInterval);
-                countdownDisplay.textContent = '';
-                startWorkout(totalDuration, exerciseInterval, restInterval);
+                document.getElementById('countdown-display').textContent = '';
+                updateMessage('GO!');
+                startWorkout(totalDuration, exerciseInterval, restInterval, beep, soundEnabled);
             }
         }, 1000);
     }
 
-    function startWorkout(totalDuration, exerciseInterval, restInterval) {
+    function startWorkout(totalDuration, exerciseInterval, restInterval, beep, soundEnabled) {
         let remainingTime = totalDuration;
-let intervalTime = exerciseInterval;
-let isExercise = true;
-            document.querySelector('.container').classList.remove('active');
-    document.querySelector('.timer-screen').classList.add('active');
+        let intervalTime = exerciseInterval;
+        let isExercise = true;
 
-    const interval = setInterval(() => {
-        if (remainingTime <= 0) {
-            clearInterval(interval);
-            updateTimerDisplay(0);
-            updateMessage('Workout COMPLETE!');
-            if (soundEnabled) {
-                applause.play();
-            }
-            showResetButton();
-            return;
+        document.querySelector('.container').classList.remove('active');
+        document.querySelector('.timer-screen').classList.add('active');
+        
+        if (soundEnabled) {
+            beep.play(); // Play beep sound at the start
         }
 
-        if (intervalTime <= 0) {
-            isExercise = !isExercise;
-            intervalTime = isExercise ? exerciseInterval : restInterval;
-            updateMessage(isExercise ? 'GO!' : 'Rest!');
-
-            if (soundEnabled) {
-                beep.play();
+        const interval = setInterval(() => {
+            if (remainingTime <= 0) {
+                clearInterval(interval);
+                updateTimerDisplay(0);
+                updateMessage('Workout COMPLETE!');
+                showResetButton();
+                return;
             }
+
+            if (intervalTime <= 0) {
+                isExercise = !isExercise;
+                intervalTime = isExercise ? exerciseInterval : restInterval;
+                updateMessage(isExercise ? 'GO!' : 'Rest!');
+                if (soundEnabled) {
+                    beep.play(); // Play beep sound at each transition
+                }
+            }
+
+            updateTimerDisplay(remainingTime);
+            intervalTime--;
+            remainingTime--;
+        }, 1000);
+    }
+
+    function updateTimerDisplay(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        document.getElementById('timer-display').textContent = `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+    }
+
+    function updateMessage(message) {
+        document.getElementById('timer-message').textContent = message;
+        if (message === 'Workout COMPLETE!' && soundEnabled) {
+            applause.play();
         }
+    }
 
-        updateTimerDisplay(remainingTime);
-        intervalTime--;
-        remainingTime--;
-    }, 1000);
-}
+    function showResetButton() {
+        const resetButton = document.createElement('button');
+        resetButton.textContent = 'Reset Workout';
+        resetButton.onclick = resetWorkout;
+        document.querySelector('.timer-screen').appendChild(resetButton);
+    }
 
-function updateTimerDisplay(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    document.getElementById('timer-display').textContent = `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-}
-
-function updateMessage(message) {
-    document.getElementById('timer-message').textContent = message;
-}
-
-function showResetButton() {
-    const resetButton = document.createElement('button');
-    resetButton.textContent = 'Reset Workout';
-    resetButton.onclick = resetWorkout;
-    document.querySelector('.timer-screen').appendChild(resetButton);
-}
-
-function resetWorkout() {
-    document.querySelector('.timer-screen').classList.remove('active');
-    document.querySelector('.container').classList.add('active');
-    document.getElementById('total-minutes').value = '';
-    document.getElementById('total-seconds').value = '';
-    document.getElementById('exercise-minutes').value = '';
-    document.getElementById('exercise-seconds').value = '';
-    document.getElementById('rest-minutes').value = '';
-    document.getElementById('rest-seconds').value = '';
-    enableSoundButton.textContent = 'Enable Sound';
-    soundEnabled = false;
-    this.remove(); // Remove the reset button
-}
+    function resetWorkout() {
+        document.querySelector('.timer-screen').classList.remove('active');
+        document.querySelector('.container').classList.add('active');
+        document.getElementById('total-minutes').value = '';
+        document.getElementById('total-seconds').value = '';
+        document.getElementById('exercise-minutes').value = '';
+        document.getElementById('exercise-seconds').value = '';
+        document.getElementById('rest-minutes').value = '';
+        document.getElementById('rest-seconds').value = '';
+        enableSoundButton.textContent = 'Enable Sound';
+        soundEnabled = false;
+        this.remove(); // Remove the reset button
+    }
 });
