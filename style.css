@@ -25,12 +25,13 @@ body {
     display: none;
 }
 
-input {
+input[type="number"] {
     margin: 10px;
     padding: 10px;
-    width: 50px;
+    width: 80px; /* Adjusted width to ensure placeholder text is fully visible */
     border: 1px solid #ddd;
     border-radius: 4px;
+    text-align: center;
 }
 
 button {
@@ -42,6 +43,9 @@ button {
     cursor: pointer;
     font-size: 16px;
     margin: 10px;
+    width: 150px; /* Adjusted width for consistency */
+    display: block; /* To make the buttons block level elements */
+    margin: 10px auto; /* Center the buttons horizontally */
 }
 
 button:hover {
@@ -56,4 +60,12 @@ button:hover {
 .timer {
     font-size: 36px;
     margin: 10px;
+}
+
+/* Additional styles for labels if needed */
+label {
+    display: block;
+    margin: 10px;
+    font-size: 18px;
+    font-weight: bold;
 }
