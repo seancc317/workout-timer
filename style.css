@@ -15,17 +15,22 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
-    display: none;
 }
 
-.timer-screen.active, .container.active {
+.container.active, .timer-screen.active {
     display: block;
+}
+
+.container {
+    display: none;
 }
 
 input {
     margin: 10px;
     padding: 10px;
     width: 50px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
 button {
@@ -36,6 +41,7 @@ button {
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+    margin: 10px;
 }
 
 button:hover {
