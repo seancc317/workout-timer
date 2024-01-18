@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     let beep = new Audio('https://raw.githubusercontent.com/seancc317/workout-timer/main/699701__magnuswaker__elevator-beep.wav');
-    let applause = new Audio('URL_OF_YOUR_APPLAUSE_SOUND_FILE'); // Replace with your applause sound URL
+    let applause = new Audio('https://githubusercontent.com/seancc317/workout-timer/main/181934__landub__applause2.wav'); // Replace with your applause sound URL
     let soundEnabled = false;
 
     const enableSoundButton = document.getElementById('enable-sound-button');
