@@ -7,7 +7,6 @@ body {
     height: 100vh;
     background-color: #f4f4f4;
 }
-
 .container, .timer-screen {
     text-align: center;
     background: #fff;
@@ -15,25 +14,16 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
-}
-
-.container.active, .timer-screen.active {
-    display: block;
-}
-
-.container {
     display: none;
 }
-
-input[type="number"] {
+.timer-screen.active, .container.active {
+    display: block;
+}
+input {
     margin: 10px;
     padding: 10px;
-    width: 80px; /* Adjusted width to ensure placeholder text is fully visible */
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    text-align: center;
+    width: 50px;
 }
-
 button {
     padding: 10px 20px;
     background-color: #007bff;
@@ -42,30 +32,15 @@ button {
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    margin: 10px;
-    width: 150px; /* Adjusted width for consistency */
-    display: block; /* To make the buttons block level elements */
-    margin: 10px auto; /* Center the buttons horizontally */
 }
-
 button:hover {
     background-color: #0056b3;
 }
-
 .message {
     font-size: 24px;
     margin: 20px;
 }
-
 .timer {
     font-size: 36px;
     margin: 10px;
-}
-
-/* Additional styles for labels if needed */
-label {
-    display: block;
-    margin: 10px;
-    font-size: 18px;
-    font-weight: bold;
 }
